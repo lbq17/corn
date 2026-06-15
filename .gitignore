@@ -1,0 +1,17 @@
+# Byte-compiled / environment
+__pycache__/
+*.py[cod]
+*.egg-info/
+venv/
+.env
+
+# Data
+data/
+
+# Models / outputs
+*.pth
+*.joblib
+out*
+
+# Mac
+.DS_Store
