@@ -1,1 +1,28 @@
 
+  - name: Set up Python
+    uses: actions/setup-python@v4
+    with:
+      python-version: '3.10'
+
+  - name: Install dependencies
+    run: |
+      python -m pip install --upgrade pip
+      pip install -r requirements.txt
+      pip install torch --index-url https://download.pytorch.org/whl/cpu
+      pip install tifffile spectral
+
+  - name: Run 1D-CNN training
+    run: |
+      mkdir -p results
+      export MPLBACKEND=Agg
+      python src/train.py --data_path data/raw/corn_spectra.csv --format csv --mode torch --epochs 80 --batch_size 64 --lr 1e-3 --out_prefix results/cnn_ --val_size 0.1 --test_size 0.2
+
+  - name: List results
+    run: |
+      echo "Results files:" && ls -la results || true
+
+  - name: Upload results artifact
+    uses: actions/upload-artifact@v4
+    with:
+      name: cnn-results
+      path: results/
